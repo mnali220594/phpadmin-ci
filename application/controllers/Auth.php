@@ -47,7 +47,13 @@ class Auth extends CI_Controller
           ];
 
           $this->session->set_userdata($data);
-          redirect('user');
+
+          // Check user role_id
+          if ($user['role_id'] == 1) {
+            redirect('admin');
+          } else {
+            redirect('user');
+          }
         } else {
           $this->session->set_flashdata(
             'message',
@@ -135,6 +141,8 @@ class Auth extends CI_Controller
   {
     $this->session->unset_userdata('email');
     $this->session->unset_userdata('role_id');
+    $this->session->unset_userdata('name');
+    $this->session->sess_destroy();
     $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">You have been logged out, see you soon!</div>');
     redirect('auth');
   }
